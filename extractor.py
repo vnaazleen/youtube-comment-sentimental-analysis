@@ -12,10 +12,14 @@ def get_youtube_comments(video_id):
         count =  0
         comments = []
         for comment in download_comments(video_id):
-            print(comment)
+            comments.append(comment['text'])
             if count >= 200:
                 break 
+            count += 1
+        
+        print("Downloaded", count, "comment(s)")
         return comments 
+        
     except Exception as e:
         print("Error:", str(e))
         sys.exit(1)

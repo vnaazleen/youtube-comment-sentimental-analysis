@@ -1,5 +1,6 @@
 import re  # for pattern matching
-import comment_extractor
+import extractor
+import filter
 
 def extract_video_id(url):
     '''
@@ -38,4 +39,9 @@ if __name__ == '__main__':
         print("Invalid URL")
     else:
         print("Video is valid")
-        comment_extractor.get_youtube_comments(video_id=video_id)
+
+        comments = extractor.get_youtube_comments(video_id=video_id)
+        print(comments)
+
+        filtered_comments = filter.filter_comments(comments=comments)
+        print(filtered_comments)
