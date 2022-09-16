@@ -1,4 +1,6 @@
 import re  # for pattern matching
+import pickle
+
 import extractor
 import filter
 import training
@@ -23,6 +25,9 @@ def extract_video_id(url):
     # if video url is invalid, we return None
     return None
 
+def bag_of_words(words):
+    return dict([word, True] for word in words)
+
 # Main execution function of Project
 if __name__ == '__main__':
     # take url as input from the user 
@@ -41,11 +46,30 @@ if __name__ == '__main__':
     else:
         print("Video is valid")
 
+        # Extracting the youtube comments
         comments = extractor.get_youtube_comments(video_id=video_id)
         print(comments)
 
+        # Filtering the comments
         filtered_comments = filter.filter_comments(comments=comments)
         print(filtered_comments)
 
+        # Training the classifier
         training.train_classifier()
         print("Built & Trained a model")
+
+        # Importing the classifer model
+        classifier_f = open("classifier.pickle", "rb")
+        classifier = pickle.load(classifier_f)
+        classifier_f.close()
+
+        pos = neg = 0
+        for comment in filtered_comments:
+            result = classifier.classify(bag_of_words(comment))
+            #print(comment," -> ",result)
+            if result == "pos":
+                pos += 1
+            else:
+                neg += 1
+
+        print(pos, " - ",neg)
