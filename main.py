@@ -1,6 +1,7 @@
 import re  # for pattern matching
 import extractor
 import filter
+import training
 
 def extract_video_id(url):
     '''
@@ -45,3 +46,6 @@ if __name__ == '__main__':
 
         filtered_comments = filter.filter_comments(comments=comments)
         print(filtered_comments)
+
+        training.train_classifier()
+        print("Built & Trained a model")
