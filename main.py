@@ -1,9 +1,7 @@
 import re  # for pattern matching
-import pickle
+import csv
 
 import extractor
-import filter
-import training
 
 def extract_video_id(url):
     '''
@@ -48,28 +46,11 @@ if __name__ == '__main__':
 
         # Extracting the youtube comments
         comments = extractor.get_youtube_comments(video_id=video_id)
-        print(comments)
+        comments = [[comment] for comment in comments]
+        fields = ['Comment']
 
-        # Filtering the comments
-        filtered_comments = filter.filter_comments(comments=comments)
-        print(filtered_comments)
+        with open('Comments.csv', 'w') as f:
+            write = csv.writer(f)
 
-        # Training the classifier
-        training.train_classifier()
-        print("Built & Trained a model")
-
-        # Importing the classifer model
-        classifier_f = open("classifier.pickle", "rb")
-        classifier = pickle.load(classifier_f)
-        classifier_f.close()
-
-        pos = neg = 0
-        for comment in filtered_comments:
-            result = classifier.classify(bag_of_words(comment))
-            #print(comment," -> ",result)
-            if result == "pos":
-                pos += 1
-            else:
-                neg += 1
-
-        print(pos, " - ",neg)
+            write.writerow(fields)
+            write.writerows(comments)

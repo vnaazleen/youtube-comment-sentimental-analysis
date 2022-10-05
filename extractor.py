@@ -13,7 +13,7 @@ def get_youtube_comments(video_id):
         comments = []
         for comment in download_comments(video_id):
             comments.append(comment['text'])
-            if count >= 200:
+            if count >= 1000:
                 break 
             count += 1
         
